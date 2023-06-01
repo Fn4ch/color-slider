@@ -1,4 +1,4 @@
-interface IOptions {
+export interface IOptions {
     slides: ISlide[]
     delay: number
     root: string
@@ -6,7 +6,7 @@ interface IOptions {
     height?: number
 }
 
-interface ISlide {
+export interface ISlide {
     color: string
     text: string
 }
@@ -24,8 +24,8 @@ export class Slider {
         if (!options.root) {
             throw new Error('Required option root is empty!')
         }
-        if (!options.delay) {
-            throw new Error('Required option delay is empty')
+        if (!options.delay || options.delay < 1) {
+            throw new Error('Required option delay is not defined!')
         }
         this.options = options
         this.currentSlide = 0
