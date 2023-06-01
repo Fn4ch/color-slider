@@ -2,8 +2,8 @@ import { Slider } from "./Slider.js";
 const options = {
     delay: 2500,
     root: "slider",
-    width: 750,
-    height: 400,
+    width: 1200,
+    height: 800,
     slides: [
         {
             color: "#c62828",

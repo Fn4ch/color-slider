@@ -15,6 +15,8 @@ export class Slider {
     options: IOptions
     currentSlide: number
     interval: NodeJS.Timeout
+    currentSlideEl: HTMLElement = document.createElement('div')
+    slider: HTMLElement | null
     constructor(options: IOptions) {
         if (options.slides.length === 0) {
             throw new Error('Required option slides is empty!')
@@ -27,37 +29,39 @@ export class Slider {
         }
         this.options = options
         this.currentSlide = 0
-        this.interval = setInterval(() => this.showSlide(), 2000)
+        this.slider = document.getElementById(this.options.root)
+        if (this.slider) {
+            this.slider.style.height = `${this.options?.height}px` ?? '400px'
+            this.slider.style.width = `${this.options.width}px` ?? '700px'
+            this.slider.innerHTML = ''
+            const initSlide = this.createSlide(options.slides[0])
+            this.slider.appendChild(initSlide)
+        }
+        this.interval = setInterval(() => this.showSlide(), options.delay)
     }
 
     private async showSlide() {
-        const slider = document.getElementById(this.options.root)
-        const slides = this.options.slides
+        if (this.options.slides.length - 1 === this.currentSlide) {
+            clearTimeout(this.interval)
+            return
+        }
+        const slider = this.slider
         if (slider) {
-            slider.style.height = `${this.options?.height}px` ?? '400px'
-            slider.style.width = `${this.options.width}px` ?? '700px'
+            const nextSlide = this.options.slides[this.currentSlide + 1]
 
-            const slide = slides[this.currentSlide]
-            const nextSlide = slides[this.currentSlide + 1]
-
-            const currentSlideEl = this.createSlide(slide)
             const nextSlideEl = this.createSlide(nextSlide)
 
-            slider.innerHTML = ''
-            slider.appendChild(currentSlideEl)
             slider.appendChild(nextSlideEl)
 
-            currentSlideEl.classList.add('slider-slide-active')
-            nextSlideEl.classList.add('slider-slide-hidden')
+            nextSlideEl.classList.add('slider-slide-in')
 
             setTimeout(() => {
-                currentSlideEl.style.opacity = '0';
-                nextSlideEl.style.opacity = '1';
                 setTimeout(() => {
-                    currentSlideEl.remove();
-                }, 500);
+                    if (slider.childElementCount > 1) {
+                        slider.removeChild(slider.firstElementChild!)
+                    }
+                }, 1000);
             }, 10);
-
 
             this.currentSlide = this.currentSlide + 1
         }
@@ -69,6 +73,7 @@ export class Slider {
         slideEl.style.background = slide.color
         slideEl.innerText = slide.text
         slideEl.style.width = `${this.options.width}px` ?? '700px'
+        slideEl.style.height = `${this.options.height}px` ?? '400px'
 
         return slideEl
     }

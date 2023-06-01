@@ -7,6 +7,6 @@ app.get('/', function (req, res) {
     res.sendfile('./index.html');
 });
 
-app.listen(4040);
+app.listen(3000);
 
-console.log('Сервер стартовал на: http://localhost:8080');
+console.log('Сервер стартовал на: http://localhost:3000');
