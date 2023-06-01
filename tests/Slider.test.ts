@@ -14,8 +14,8 @@ const mockDocument = {
 describe('Slider', () => {
     let options: IOptions
     beforeEach(() => {
-        mockDocument.createElement.mockClear();
-        mockDocument.getElementById.mockClear();
+        mockDocument.createElement.mockClear()
+        mockDocument.getElementById.mockClear()
 
         options = {
             slides: [
